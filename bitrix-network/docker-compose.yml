@@ -1,0 +1,63 @@
+services:
+  push-sub:
+    image: quay.io/bitrix24/push:${PUSH_VERSION}
+    restart: always
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=${REDIS_PORT}
+      - SECURITY_KEY=${PUSH_SECURITY_KEY}
+      - MODE=sub
+    networks:
+      - traefik-shared
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.push-sub.rule=Host(`push-sub.localhost`)
+      - traefik.http.routers.push-sub.entrypoints=http
+      - traefik.http.services.push-sub.loadbalancer.server.port=8010
+
+  push-pub:
+    image: quay.io/bitrix24/push:${PUSH_VERSION}
+    restart: always
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=${REDIS_PORT}
+      - SECURITY_KEY=${PUSH_SECURITY_KEY}
+      - MODE=pub
+    networks:
+      - traefik-shared
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.push-pub.rule=Host(`push-pub.localhost`)
+      - traefik.http.routers.push-pub.entrypoints=http
+      - traefik.http.services.push-pub.loadbalancer.server.port=8010
+
+  redis:
+    image: redis:${REDIS_VERSION}
+    container_name: redis
+    restart: always
+    networks:
+      - traefik-shared
+    command: ["redis-server", "--appendonly", "yes"]
+
+  traefik:
+    image: traefik:${TRAEFIK_VERSION}
+    container_name: traefik
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=traefik-shared"
+      - "--entrypoints.http.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    restart: always
+    networks:
+      - traefik-shared
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+networks:
+  traefik-shared:
+    name: traefik-shared
+    driver: bridge
