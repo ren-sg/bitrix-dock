@@ -5,10 +5,11 @@ services:
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=${REDIS_PORT}
-      - REDIS_PASSWORD=""
+      - REDIS_PASSWORD=
       - PUSH_SECURITY_KEY=${PUSH_SECURITY_KEY}
       - PUSH_SUB_MODE=${PUSH_SUB_MODE}
       - PUSH_SUB_PORT=${PUSH_SUB_PORT}
+      - COMPOSE_PROJECT_NAME=dev
     networks:
       - traefik-shared
     labels:
@@ -35,10 +36,11 @@ services:
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=${REDIS_PORT}
-      - REDIS_PASSWORD=""
+      - REDIS_PASSWORD=
       - PUSH_SECURITY_KEY=${PUSH_SECURITY_KEY}
       - PUSH_PUB_MODE=${PUSH_PUB_MODE}
       - PUSH_PUB_PORT=${PUSH_PUB_PORT}
+      - COMPOSE_PROJECT_NAME=dev
     networks:
       - traefik-shared
     labels:
