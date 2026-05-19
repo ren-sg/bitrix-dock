@@ -6,7 +6,7 @@ COPY ./conf.d/upstream.conf /etc/nginx/conf.d/
 COPY ./conf.d/default.conf /etc/nginx/conf.d/
 RUN mkdir -p /etc/nginx/inc
 COPY ./conf.d/push.conf /etc/nginx/inc/
-# COPY ./conf.d/ssl.conf /etc/nginx/conf.d/
+COPY ./conf.d/ssl.conf /etc/nginx/conf.d/
 
 RUN apk add --no-cache shadow && \
     (getent group www-data || addgroup -g 1000 -S www-data) && \

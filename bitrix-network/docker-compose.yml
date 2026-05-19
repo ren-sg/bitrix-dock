@@ -92,8 +92,10 @@ services:
       - "--providers.docker.exposedbydefault=false"
       - "--providers.docker.network=traefik-shared"
       - "--entrypoints.http.address=:80"
+      - "--entrypoints.https.address=:443"
     ports:
       - "80:80"
+      - "443:443"
       - "${TRAEFIK_DASHBOARD_PORT}:8080"
     restart: always
     networks:
