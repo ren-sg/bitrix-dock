@@ -47,9 +47,19 @@ echo -e "Найден домен: ${GREEN}${PROJECT_DOMAIN}${NC}"
 # 3. Создание директории для сертификатов
 mkdir -p "$CERTS_DIR"
 
+# Устанавливаем владельца директории на текущего пользователя
+if [ -d "$CERTS_DIR" ]; then
+    sudo chown -R "$USER:$USER" "$CERTS_DIR"
+fi
+
 # 4. Генерация сертификатов
 echo "Генерация сертификата для $PROJECT_DOMAIN..."
 mkcert -cert-file "$CERTS_DIR/cert.crt" -key-file "$CERTS_DIR/cert.key" "$PROJECT_DOMAIN" "*.${PROJECT_DOMAIN}"
+
+# Устанавливаем владельца сгенерированных сертификатов на текущего пользователя
+if [ -f "$CERTS_DIR/cert.crt" ] && [ -f "$CERTS_DIR/cert.key" ]; then
+    sudo chown "$USER:$USER" "$CERTS_DIR/cert.crt" "$CERTS_DIR/cert.key"
+fi
 
 echo -e "${GREEN}✅ Сертификаты успешно сгенерированы!${NC}"
 echo -e "Файлы сертификатов сохранены в: ${CERTS_DIR}"
