@@ -104,8 +104,6 @@ RUN apk add --no-cache --virtual .build-deps-xdebug \
     && rm -rf /tmp/xdebug \
     && apk del .build-deps-xdebug
 
-ENV XDEBUG_CONFIG="client_host=host.docker.internal client_port=9003 start_with_request=yes"
-
 # -----------------------------------------------------------------------------
 # Продакшн-среда
 # -----------------------------------------------------------------------------
